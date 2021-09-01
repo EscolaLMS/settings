@@ -2,11 +2,10 @@
 
 namespace EscolaLms\Auth\Http\Requests\Admin;
 
-use EscolaLms\Fields\Models\Setting;
+use EscolaLms\Settings\Models\Setting;
+use EscolaLms\Settings\Enums\SettingsTypes;
 
-use EscolaLms\Fields\Enums\FieldTypes;
-
-class UserGroupListRequest extends AbstractAdminOnlyRequest
+class SettingsCreateRequest extends AbstractAdminOnlyRequest
 {
     public function authorize()
     {
@@ -21,7 +20,7 @@ class UserGroupListRequest extends AbstractAdminOnlyRequest
             'public' => ['boolean'],
             'enumerable' => ['boolean'],
             'sort' => ['integer'],
-            'type' => ['required', 'in:' . implode(',', FieldTypes::getValues())],
+            'type' => ['required', 'in:' . implode(',', SettingsTypes::getValues())],
             'value' => ['required', 'string'],
         ];
     }

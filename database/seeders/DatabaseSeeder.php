@@ -1,9 +1,9 @@
 <?php
 
-namespace EscolaLms\Fields\Database\Seeders;
+namespace EscolaLms\Settings\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use EscolaLms\Fields\Models\Setting;
+use EscolaLms\Settings\Models\Setting;
 
 class DatabaseSeeder extends Seeder
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace EscolaLms\Fields\Database\Seeders;
+namespace EscolaLms\Settings\Database\Seeders;
 
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use EscolaLms\Core\Enums\UserRole;
-use EscolaLms\Fields\Enums\SettingsPermissionsEnum;
+use EscolaLms\Settings\Enums\SettingsPermissionsEnum;
 use Illuminate\Database\Seeder;
 
 class PermissionTableSeeder extends Seeder

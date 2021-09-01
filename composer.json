@@ -1,5 +1,5 @@
 {
-    "name": "escolalms/fields",
+    "name": "escolalms/settings",
     "description": "Escola LMS Settings and custom fields management",
     "type": "package",
     "require": {
@@ -19,15 +19,15 @@
     }],
     "autoload": {
         "psr-4": {
-            "EscolaLms\\Fields\\": "src",
-            "EscolaLms\\Fields\\Database\\Seeders\\": "database/seeders",
-            "EscolaLms\\Fields\\Tests\\": "tests"
+            "EscolaLms\\Settings\\": "src",
+            "EscolaLms\\Settings\\Database\\Seeders\\": "database/seeders",
+            "EscolaLms\\Settings\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "EscolaLms\\Fields\\EscolaLmsFieldsServiceProvider"
+                "EscolaLms\\Settings\\EscolaLmsSettingsServiceProvider"
             ]
         }
     }

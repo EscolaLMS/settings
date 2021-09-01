@@ -1,9 +1,9 @@
 <?php
 
-namespace EscolaLms\Fields;
+namespace EscolaLms\Settings;
 
-use EscolaLms\Fields\Services\Contracts\FieldsServiceContract;
-use EscolaLms\Fields\Services\FieldsService;
+use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
+use EscolaLms\Settings\Services\SettingsService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -12,10 +12,10 @@ use Illuminate\Support\ServiceProvider;
  */
 
 
-class EscolaLmsFieldsServiceProvider extends ServiceProvider
+class EscolaLmsSettingsServiceProvider extends ServiceProvider
 {
     public $singletons = [
-        FieldsServiceContract::class => FieldsService::class,
+        SettingsServiceContract::class => SettingsService::class,
     ];
 
     public function boot()

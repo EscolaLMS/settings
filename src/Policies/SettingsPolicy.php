@@ -1,12 +1,12 @@
 <?php
 
-namespace EscolaLms\Fields\Policies;
+namespace EscolaLms\Settings\Policies;
 
 use EscolaLms\Auth\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use EscolaLms\Fields\Enums\SettingsPermissionsEnum;
+use EscolaLms\Settings\Enums\SettingsPermissionsEnum;
 
-class FieldsPolicy
+class SettingsPolicy
 {
 
     use HandlesAuthorization;

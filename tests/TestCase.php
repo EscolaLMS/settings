@@ -1,14 +1,12 @@
 <?php
 
-namespace EscolaLms\Fields\Tests;
+namespace EscolaLms\Settings\Tests;
 
-use EscolaLms\Core\EscolaLmsServiceProvider;
-use EscolaLms\Core\Models\User;
-use EscolaLms\Fields\AuthServiceProvider;
-use EscolaLms\Fields\Database\Seeders\PermissionTableSeeder;
-use EscolaLms\Fields\EscolaLmsFieldsServiceProvider;
+
+use EscolaLms\Settings\AuthServiceProvider;
+use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
+use EscolaLms\Settings\EscolaLmsSettingsServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -28,7 +26,7 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
     {
         return [
             ...parent::getPackageProviders($app),
-            EscolaLmsFieldsServiceProvider::class,
+            EscolaLmsSettingsServiceProvider::class,
             PassportServiceProvider::class,
             PermissionServiceProvider::class,
             AuthServiceProvider::class

@@ -2,11 +2,11 @@
 
 namespace Tests\APIs;
 
-use EscolaLms\Fields\Models\Setting;
+use EscolaLms\Settings\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use EscolaLms\Fields\Tests\TestCase;
+use EscolaLms\Settings\Tests\TestCase;
 
-class FieldsAnonymousTest extends TestCase
+class SettingsAnonymousTest extends TestCase
 {
     use DatabaseTransactions;
 

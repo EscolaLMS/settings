@@ -1,10 +1,10 @@
 <?php
 
-namespace EscolaLms\Fields\Http\Resources;
+namespace EscolaLms\Settings\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FieldResource extends JsonResource
+class SettingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

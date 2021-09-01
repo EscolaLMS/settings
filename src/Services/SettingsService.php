@@ -1,13 +1,13 @@
 <?php
 
-namespace EscolaLms\Fields\Services;
+namespace EscolaLms\Settings\Services;
 
 use Illuminate\Support\Collection;
-use EscolaLms\Fields\Services\Contracts\FieldsServiceContract;
-use EscolaLms\Fields\Models\Setting;
+use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
+use EscolaLms\Settings\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 
-class FieldsService implements FieldsServiceContract
+class SettingsService implements SettingsServiceContract
 {
     public function publicList(): Collection
     {
