@@ -11,7 +11,7 @@ class SettingsUpdateRequest extends FormRequest
 {
     public function authorize()
     {
-        return $this->user()->can('delete', Setting::class);
+        return $this->user()->can('update', Setting::class);
     }
 
     public function rules()
