@@ -21,14 +21,6 @@ class SettingsService implements SettingsServiceContract
         ])->orderBy('sort')->get();
     }
 
-    public function allList(): Collection
-    {
-        return Setting::orderBy('group')
-            ->orderBy('key')
-            ->orderBy('sort')
-            ->get();
-    }
-
     public function find(string $group, string $key, $public = null): Model
     {
         $where = [

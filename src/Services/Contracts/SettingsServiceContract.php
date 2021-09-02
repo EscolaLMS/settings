@@ -10,8 +10,6 @@ interface SettingsServiceContract
 {
     public function publicList(): Collection;
 
-    public function allList(): Collection;
-
     public function find(string $group, string $key, $public = null): Model;
 
     public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator;
