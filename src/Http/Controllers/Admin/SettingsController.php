@@ -4,7 +4,7 @@ namespace EscolaLms\Settings\Http\Controllers\Admin;
 
 // use EscolaLms\Settings\Http\Controllers\Swagger\LessonAPISwagger;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
-use EscolaLms\Settings\Http\Controllers\Admin\Contracts\SettingsControllerContract;
+use EscolaLms\Settings\Http\Controllers\Admin\Swagger\SettingsControllerContract;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsCreateRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsDeleteRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsListRequest;
@@ -105,7 +105,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
         return $this->sendSuccess('Setting deleted successfully');
     }
 
-    public function groups(SettingsReadRequest $request): JsonResponse
+    public function groups(SettingsListRequest $request): JsonResponse
     {
 
         $groups = $this->service->groups();

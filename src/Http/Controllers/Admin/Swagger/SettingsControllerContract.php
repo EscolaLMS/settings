@@ -1,6 +1,6 @@
 <?php
 
-namespace EscolaLms\Settings\Http\Controllers\Admin\Contracts;
+namespace EscolaLms\Settings\Http\Controllers\Admin\Swagger;
 
 use EscolaLms\Settings\Http\Requests\Admin\SettingsCreateRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsDeleteRequest;
