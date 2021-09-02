@@ -64,6 +64,7 @@ class Setting extends Model
         'enumerable',
         'sort',
         'type',
+        'data'
     ];
 
     /**
