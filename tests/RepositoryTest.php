@@ -26,27 +26,26 @@ class RepositoryTest extends TestCase
 
     public function test_model_cast()
     {
-        
+
         $this->seed(DatabaseSeeder::class);
         $setting = Setting::first();
 
         $setting->update([
             'type' => 'file',
-            'value' => 'format_c'            
+            'value' => 'format_c',
+            'data' => "WHATEVER"
         ]);
 
         $this->assertEquals($setting->data, Storage::url('format_c'));
 
-        $arr = ['a','b','c'];
+        $arr = ['a', 'b', 'c'];
 
         $setting->update([
             'type' => 'json',
-            'value' => json_encode($arr)            
+            'value' => json_encode($arr),
+            'data' => "WHATEVER"
         ]);
 
         $this->assertEquals($setting->data, $arr);
-
-
-      
     }
 }
