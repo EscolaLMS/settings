@@ -4,6 +4,7 @@ namespace EscolaLms\Settings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use EscolaLms\Settings\Casts\Setting as SettingCast;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(
@@ -79,7 +80,6 @@ class Setting extends Model
         'sort' => 'integer',
         'type' => 'string',
         'value' => 'string',
-        'data' => SettingCast::class
     ];
 
     protected $appends = [
@@ -88,6 +88,18 @@ class Setting extends Model
 
     public function getDataAttribute()
     {
-        return $this->castAttribute('data', $this->attributes['value']);
+        switch($this->type) {
+            case "config":
+                return config($this->value);
+                break;
+            case "json":
+                return json_decode($this->value);
+                break;
+            case "file":
+                return Storage::url($this->value);
+                break;
+            default:
+                return $this->value;
+        }
     }
 }
