@@ -4,10 +4,8 @@ namespace EscolaLms\Settings\Enums;
 
 use EscolaLms\Core\Enums\BasicEnum;
 
-class SettingsTypes extends BasicEnum
+class SettingTypes extends BasicEnum
 {
-
-
     const TEXT = 'text';
     const MARKDOWN = 'markdown';
     const JSON = 'json';

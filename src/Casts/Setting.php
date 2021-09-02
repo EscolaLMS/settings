@@ -20,16 +20,16 @@ class Setting implements CastsAttributes
     {
         switch($attributes['type']) {
             case "config":
-                return config($value);
+                return config($attributes['value']);
                 break;
             case "json":
-                return json_decode($value);
+                return json_decode($attributes['value']);
                 break;
             case "file":
-                return Storage::url($value);
+                return Storage::url($attributes['value']);
                 break;
             default:
-                return $value;
+                return $attributes['value'];
         }
        
     }

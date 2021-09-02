@@ -17,7 +17,7 @@ class SettingsCollection extends ResourceCollection
         $data = [];
 
         foreach ($this->collection as $value) {
-            $data[$value->group][$value->key] = $value->value;
+            $data[$value->group][$value->key] = $value->data;
         }
 
         return $data;

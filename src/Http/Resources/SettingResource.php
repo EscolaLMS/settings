@@ -14,8 +14,7 @@ class SettingResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        $data = [
+        return [
             'id' => $this->id,
             'key' => $this->key,
             'group' => $this->group,
@@ -24,8 +23,7 @@ class SettingResource extends JsonResource
             'enumerable' => $this->enumerable,
             'sort' => $this->sort,
             'type' => $this->type,
+            'data' => $this->data,
         ];
-
-        return $data;
     }
 }

@@ -4,6 +4,7 @@ namespace EscolaLms\Settings\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use EscolaLms\Settings\Casts\Setting as SettingCast;
+
 /**
  * @OA\Schema(
  *      schema="Setting",
@@ -77,6 +78,16 @@ class Setting extends Model
         'enumerable' => 'boolean',
         'sort' => 'integer',
         'type' => 'string',
-        'value' => SettingCast::class
+        'value' => 'string',
+        'data' => SettingCast::class
     ];
+
+    protected $appends = [
+        'data'
+    ];
+
+    public function getDataAttribute()
+    {
+        return $this->castAttribute('data', $this->attributes['value']);
+    }
 }
