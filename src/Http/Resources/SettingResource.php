@@ -26,10 +26,6 @@ class SettingResource extends JsonResource
             'type' => $this->type,
         ];
 
-        if ($this->type === 'json') {
-            $data['value'] = json_decode($data['value']);
-        }
-
         return $data;
     }
 }

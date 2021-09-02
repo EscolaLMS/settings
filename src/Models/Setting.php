@@ -2,9 +2,8 @@
 
 namespace EscolaLms\Settings\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use EscolaLms\Settings\Casts\Setting as SettingCast;
 /**
  * @OA\Schema(
  *      schema="Setting",
@@ -78,6 +77,6 @@ class Setting extends Model
         'enumerable' => 'boolean',
         'sort' => 'integer',
         'type' => 'string',
-        'value' => 'string',
+        'value' => SettingCast::class
     ];
 }
