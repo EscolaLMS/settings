@@ -4,7 +4,7 @@ namespace EscolaLms\Settings\Http\Controllers\Admin;
 
 // use EscolaLms\Settings\Http\Controllers\Swagger\LessonAPISwagger;
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
-
+use EscolaLms\Settings\Http\Controllers\Admin\Contracts\SettingsControllerContract;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsCreateRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsDeleteRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsListRequest;
@@ -19,14 +19,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Response;
 use Error;
-
+use Illuminate\Http\JsonResponse;
 
 /**
  * Class LessonController
  * @package App\Http\Controllers
  */
 
-class SettingsController extends EscolaLmsBaseController /* implements LessonAPISwagger */
+class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract 
 {
     private SettingsRepositoryContract $repository;
     private SettingsServiceContract $service;
@@ -37,14 +37,14 @@ class SettingsController extends EscolaLmsBaseController /* implements LessonAPI
         $this->service = $service;
     }
 
-    public function index(SettingsListRequest $request)
+    public function index(SettingsListRequest $request): JsonResponse
     {
         $search = Arr::except($request->validated(), ['per_page', 'page', 'order_by', 'order']);
         $settings = $this->service->searchAndPaginate($search, $request->input('per_page'));
         return $this->sendResponseForResource(SettingResource::collection($settings), __("Order search results"));
     }
 
-    public function store(SettingsCreateRequest $request)
+    public function store(SettingsCreateRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -57,7 +57,7 @@ class SettingsController extends EscolaLmsBaseController /* implements LessonAPI
         return $this->sendResponse($setting->toArray(), 'Setting saved successfully');
     }
 
-    public function show($id, SettingsReadRequest $request)
+    public function show($id, SettingsReadRequest $request): JsonResponse
     {
 
         $setting = $this->repository->find($id);
@@ -69,7 +69,7 @@ class SettingsController extends EscolaLmsBaseController /* implements LessonAPI
         return $this->sendResponse($setting->toArray(), 'Setting retrieved successfully');
     }
 
-    public function update($id, SettingsUpdateRequest $request)
+    public function update($id, SettingsUpdateRequest $request): JsonResponse
     {
         $input = $request->all();
 
@@ -88,7 +88,7 @@ class SettingsController extends EscolaLmsBaseController /* implements LessonAPI
         return $this->sendResponse($setting->toArray(), 'Setting updated successfully');
     }
 
-    public function destroy($id, SettingsDeleteRequest $request)
+    public function destroy($id, SettingsDeleteRequest $request): JsonResponse
     {
         $setting = $this->repository->find($id);
 
@@ -105,10 +105,10 @@ class SettingsController extends EscolaLmsBaseController /* implements LessonAPI
         return $this->sendSuccess('Setting deleted successfully');
     }
 
-    public function groups(SettingsReadRequest $request)
+    public function groups(SettingsReadRequest $request): JsonResponse
     {
 
-        $groups = $this->service->groups();       
+        $groups = $this->service->groups();
 
         return $this->sendResponse($groups->toArray(), 'Settings groups retrieved successfully');
     }
