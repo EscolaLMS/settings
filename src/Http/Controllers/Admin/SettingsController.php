@@ -22,7 +22,7 @@ use Illuminate\Http\JsonResponse;
  * @package App\Http\Controllers
  */
 
-class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract 
+class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract
 {
     private SettingsRepositoryContract $repository;
     private SettingsServiceContract $service;
@@ -44,11 +44,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
     {
         $input = $request->all();
 
-        try {
-            $setting = $this->repository->create($input);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $setting = $this->repository->create($input);
 
         return $this->sendResponse($setting->toArray(), 'Setting saved successfully');
     }
@@ -75,11 +71,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
             return $this->sendError('Setting not found');
         }
 
-        try {
-            $setting = $this->repository->update($input, $id);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $setting = $this->repository->update($input, $id);
 
         return $this->sendResponse($setting->toArray(), 'Setting updated successfully');
     }
@@ -92,11 +84,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
             return $this->sendError('Setting not found');
         }
 
-        try {
-            $this->repository->delete($id);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $this->repository->delete($id);
 
         return $this->sendSuccess('Setting deleted successfully');
     }

@@ -84,6 +84,16 @@ class SettingsAdminTest extends TestCase
         $this->response->assertOk();
     }
 
+    public function test_not_found_show()
+    {
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'GET',
+            '/api/admin/settings/9999'
+        );
+        $this->response->assertNotFound();
+    }
+
     public function test_admin_groups()
     {
 
@@ -119,6 +129,14 @@ class SettingsAdminTest extends TestCase
         $this->response->assertOk();
 
         $this->assertEquals($input['value'], $this->response->getData()->data->value);
+
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/9999',
+            $input
+        );
+        $this->response->assertNotFound();
     }
 
     public function test_admin_create()
