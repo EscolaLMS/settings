@@ -4,6 +4,7 @@ namespace EscolaLms\Settings\Services\Contracts;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface SettingsServiceContract
 {
@@ -12,5 +13,8 @@ interface SettingsServiceContract
     public function allList(): Collection;
 
     public function find(string $group, string $key, $public = null): Model;
-   
+
+    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator;
+
+    public function groups(): Collection;
 }

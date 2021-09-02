@@ -1,12 +1,13 @@
 <?php
 
-namespace EscolaLms\Auth\Http\Requests\Admin;
+namespace EscolaLms\Settings\Http\Requests\Admin;
 
 use EscolaLms\Settings\Models\Setting;
-use EscolaLms\Settings\Enums\SettingsTypes;
+use EscolaLms\Settings\Enums\SettingTypes;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SettingsCreateRequest extends AbstractAdminOnlyRequest
+class SettingsCreateRequest extends FormRequest
 {
     public function authorize()
     {
@@ -21,7 +22,7 @@ class SettingsCreateRequest extends AbstractAdminOnlyRequest
             'public' => ['boolean'],
             'enumerable' => ['boolean'],
             'sort' => ['integer'],
-            'type' => ['required',  Rule::in(SettingsTypes::getValues())],
+            'type' => ['required',  Rule::in(SettingTypes::getValues())],
             'value' => ['required', 'string'],
         ];
     }
