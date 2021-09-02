@@ -33,8 +33,8 @@ class RepositoryTest extends TestCase
         $setting->update([
             'type' => 'file',
             'value' => 'format_c',
-            'data' => "WHATEVER"
         ]);
+
 
         $this->assertEquals($setting->data, Storage::url('format_c'));
 
@@ -43,7 +43,6 @@ class RepositoryTest extends TestCase
         $setting->update([
             'type' => 'json',
             'value' => json_encode($arr),
-            'data' => "WHATEVER"
         ]);
 
         $this->assertEquals($setting->data, $arr);
