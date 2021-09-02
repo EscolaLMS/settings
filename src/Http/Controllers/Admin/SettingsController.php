@@ -10,14 +10,10 @@ use EscolaLms\Settings\Http\Requests\Admin\SettingsDeleteRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsListRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsReadRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsUpdateRequest;
-use EscolaLms\Settings\Models\Setting;
 use EscolaLms\Settings\Repositories\Contracts\SettingsRepositoryContract;
 use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
 use EscolaLms\Settings\Http\Resources\SettingResource;
-use EscolaLms\Settings\Repositories\SettingsRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Response;
+
 use Error;
 use Illuminate\Http\JsonResponse;
 
@@ -26,7 +22,7 @@ use Illuminate\Http\JsonResponse;
  * @package App\Http\Controllers
  */
 
-class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract 
+class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract
 {
     private SettingsRepositoryContract $repository;
     private SettingsServiceContract $service;
@@ -39,7 +35,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
 
     public function index(SettingsListRequest $request): JsonResponse
     {
-        $search = Arr::except($request->validated(), ['per_page', 'page', 'order_by', 'order']);
+        $search = $request->only(['group']);
         $settings = $this->service->searchAndPaginate($search, $request->input('per_page'));
         return $this->sendResponseForResource(SettingResource::collection($settings), __("Order search results"));
     }
@@ -48,11 +44,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
     {
         $input = $request->all();
 
-        try {
-            $setting = $this->repository->create($input);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $setting = $this->repository->create($input);
 
         return $this->sendResponse($setting->toArray(), 'Setting saved successfully');
     }
@@ -79,11 +71,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
             return $this->sendError('Setting not found');
         }
 
-        try {
-            $setting = $this->repository->update($input, $id);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $setting = $this->repository->update($input, $id);
 
         return $this->sendResponse($setting->toArray(), 'Setting updated successfully');
     }
@@ -96,11 +84,7 @@ class SettingsController extends EscolaLmsBaseController  implements SettingsCon
             return $this->sendError('Setting not found');
         }
 
-        try {
-            $this->repository->delete($id);
-        } catch (Error $error) {
-            return $this->sendError($error->getMessage(), 422);
-        }
+        $this->repository->delete($id);
 
         return $this->sendSuccess('Setting deleted successfully');
     }
