@@ -52,6 +52,27 @@ class SettingsAdminTest extends TestCase
         $this->response->assertJsonFragment(['current_page' => 2]);
     }
 
+    public function test_admin_fetch_search()
+    {
+
+        Setting::firstOrCreate([
+            'group' => 'images',
+            'key' => 'tutor',
+            'value' => "tutor_avatar.jpg",
+            'public' => true,
+            'enumerable' => true,
+            'type' => 'image'
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'GET',
+            '/api/admin/settings?group=images'
+        );
+        $this->response->assertOk();
+
+        $this->response->assertJsonFragment(['group' => 'images']);
+    }
+
     public function test_admin_show()
     {
 
