@@ -15,7 +15,7 @@ See swagger for details
 
 This package can be used to enable Admin to change Application config values.
 
-Every package can register it's config keys by calling `registerConfig` static method from `AdministrableConfig` Facade in Package Service Provider.
+Every package can register config keys by calling `registerConfig` static method from `AdministrableConfig` Facade in its own Package Service Provider `register` method.
 
 ```php
 use EscolaLms\Settings\Facades\AdministrableConfig;
