@@ -94,6 +94,8 @@ class ConfigServiceTest extends TestCase
 
     public function test_load_from_database()
     {
+        Config::set('escola_settings.use_database', true);
+
         Config::set('test_config_file.test_key', 'test_value');
         AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string']);
 
@@ -103,10 +105,30 @@ class ConfigServiceTest extends TestCase
 
         $model = ModelsConfig::create(['id' => 1, 'value' => ['test_config_file.test_key' => 'foobar']]);
 
-        AdministrableConfig::loadConfigFromDatabase();
+        $this->assertTrue(AdministrableConfig::loadConfigFromDatabase(true));
 
         $config = AdministrableConfig::getPublicConfig();
         $this->assertEquals('foobar', $config['test_config_file.test_key']);
         $this->assertEquals('foobar', Config::get('test_config_file.test_key'));
+    }
+
+    public function test_load_from_database_fails_if_not_enabled_or_forced()
+    {
+        Config::set('escola_settings.use_database', false);
+
+        Config::set('test_config_file.test_key', 'test_value');
+        AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string']);
+
+        $config = AdministrableConfig::getPublicConfig();
+        $this->assertEquals('test_value', $config['test_config_file.test_key']);
+        $this->assertEquals('test_value', Config::get('test_config_file.test_key'));
+
+        $model = ModelsConfig::create(['id' => 1, 'value' => ['test_config_file.test_key' => 'foobar']]);
+
+        $this->assertFalse(AdministrableConfig::loadConfigFromDatabase());
+
+        $config = AdministrableConfig::getPublicConfig();
+        $this->assertEquals('test_value', $config['test_config_file.test_key']);
+        $this->assertEquals('test_value', Config::get('test_config_file.test_key'));
     }
 }

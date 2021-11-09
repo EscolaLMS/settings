@@ -3,6 +3,8 @@
 namespace EscolaLms\Settings;
 
 use EscolaLms\Settings\AuthServiceProvider;
+use EscolaLms\Settings\ConfigRewriter\ConfigRepositoryExtension;
+use EscolaLms\Settings\ConfigRewriter\ConfigRewriter;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Repositories\Contracts\SettingsRepositoryContract;
 use EscolaLms\Settings\Repositories\SettingsRepository;
@@ -10,6 +12,8 @@ use EscolaLms\Settings\Services\AdministrableConfigService;
 use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
 use EscolaLms\Settings\Services\SettingsService;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,9 +39,7 @@ class EscolaLmsSettingsServiceProvider extends ServiceProvider
             $this->bootForConsole();
         }
 
-        if (Config::get('escola_settings.use_database', false)) {
-            AdministrableConfig::loadConfigFromDatabase();
-        }
+        AdministrableConfig::loadConfigFromDatabase();
     }
 
     public function register()
@@ -48,6 +50,16 @@ class EscolaLmsSettingsServiceProvider extends ServiceProvider
 
         $this->app->bind('escola_config_facade', function () {
             return new AdministrableConfigService();
+        });
+
+        $this->app->singleton(ConfigRepositoryExtension::class, function ($app, $items) {
+            $writer = new ConfigRewriter(resolve('files'), App::configPath());
+            return new ConfigRepositoryExtension($writer, $items);
+        });
+
+        $this->app->extend('config', function ($config, $app) {
+            $config_items = $config->all();
+            return $app->make(ConfigRepositoryExtension::class, $config_items);
         });
     }
 

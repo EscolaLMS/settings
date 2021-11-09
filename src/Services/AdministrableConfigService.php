@@ -41,15 +41,8 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $keys = $this->getNotReadonlyKeys();
         $config = $this->mapKeysToConfigValues($keys);
 
-        $undoted = $this->undot($config);
-
-        foreach ($undoted as $master_key => $config_array) {
-            $path = App::configPath($master_key . '.php');
-            $config_array = Config::get($master_key);
-            $config_file_content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config_array, true) . ';';
-            $fp = fopen($path, 'w');
-            fwrite($fp, $config_file_content);
-            fclose($fp);
+        foreach ($config as $key => $value) {
+            Config::write($key, $value);
         }
 
         return true;
@@ -65,17 +58,19 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         return $configModel->exists;
     }
 
-    public function loadConfigFromDatabase(): bool
+    public function loadConfigFromDatabase(bool $forced = false): bool
     {
-        $configModel = ModelsConfig::query()->find(1);
-        if (!is_null($configModel)) {
-            $config = $configModel->value;
-            foreach ($config as $key => $value) {
-                if (array_key_exists($key, $this->administrableConfig) && !$this->administrableConfig[$key]['readonly']) {
-                    Config::set($key, $value);
+        if (Config::get('escola_settings.use_database', false) || $forced) {
+            $configModel = ModelsConfig::query()->find(1);
+            if (!is_null($configModel)) {
+                $config = $configModel->value;
+                foreach ($config as $key => $value) {
+                    if (array_key_exists($key, $this->administrableConfig) && !$this->administrableConfig[$key]['readonly']) {
+                        Config::set($key, $value);
+                    }
                 }
+                return true;
             }
-            return true;
         }
         return false;
     }
