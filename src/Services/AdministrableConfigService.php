@@ -43,7 +43,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $config = $this->mapKeysToConfigValues($keys);
 
         foreach ($config as $key => $value) {
-            $master_key = Str::before('.', $key);
+            $master_key = Str::before($key, '.');
             $path = App::configPath($master_key . '.php');
             if (file_exists($path)) {
                 Config::write($key, $value);

@@ -66,9 +66,21 @@ class ConfigServiceTest extends TestCase
         $path = App::configPath('test_config_file.php');
         $this->assertTrue(file_exists($path));
 
-        $file = include $path;
-        $this->assertEquals('test_value', $file['test_key']);
-        $this->assertEquals('foobar', $file['test_key2']);
+        $file_content = file_get_contents($path);
+        $vars = eval('?>' . $file_content);
+        $this->assertEquals('test_value', $vars['test_key']);
+        $this->assertEquals('foobar', $vars['test_key2']);
+
+        AdministrableConfig::setConfig([
+            'test_config_file.test_key' => 'foobar2',
+            'test_config_file.test_key2' => 'foobar2'
+        ]);
+        AdministrableConfig::storeConfig();
+
+        $file_content = file_get_contents($path);
+        $vars = eval('?>' . $file_content);
+        $this->assertEquals('test_value', $vars['test_key']);
+        $this->assertEquals('foobar2', $vars['test_key2']);
     }
 
     public function test_store_to_database()
