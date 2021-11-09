@@ -43,15 +43,19 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $config = $this->mapKeysToConfigValues($keys);
 
         foreach ($config as $key => $value) {
-            $master_key = Str::before($key, '.');
-            $path = App::configPath($master_key . '.php');
+            $path = App::configPath(Str::before($key, '.') . '.php');
             if (file_exists($path)) {
                 Config::write($key, $value);
-            } else {
-                $config_array = Config::get($master_key);
-                $config_file_content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config_array, true) . ';';
-                file_put_contents($path, $config_file_content);
+                unset($config[$key]);
             }
+        }
+
+        // this is needed if config file was not published, or in case of tests - if we are testing dynamicaly created config keys not based on existing config file
+        $config_undotted = $this->undot($config);
+        foreach ($config_undotted as $master_key => $value) {
+            $config_array = Config::get($master_key);
+            $config_file_content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config_array, true) . ';';
+            file_put_contents($path, $config_file_content);
         }
 
         return true;
