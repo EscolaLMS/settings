@@ -3,6 +3,7 @@
 namespace EscolaLms\Settings\ConfigRewriter;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 
 class ConfigRewriter
 {
@@ -62,14 +63,6 @@ class ConfigRewriter
         $contents = file_get_contents($path);
         $vars = eval('?>' . $contents);
 
-        $keys = explode('.', $key);
-
-        $isset = false;
-        while ($key = array_shift($keys)) {
-            $isset = isset($vars[$key]);
-            if (is_array($vars[$key])) $vars = $vars[$key];
-        }
-
-        return $isset;
+        return Arr::has($vars, $key);
     }
 }

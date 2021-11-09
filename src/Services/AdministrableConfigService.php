@@ -5,6 +5,7 @@ namespace EscolaLms\Settings\Services;
 use EscolaLms\Settings\Models\Config as ModelsConfig;
 use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +43,15 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $config = $this->mapKeysToConfigValues($keys);
 
         foreach ($config as $key => $value) {
-            Config::write($key, $value);
+            $master_key = Str::before('.', $key);
+            $path = App::configPath($master_key . '.php');
+            if (file_exists($path)) {
+                Config::write($key, $value);
+            } else {
+                $config_array = Config::get($master_key);
+                $config_file_content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config_array, true) . ';';
+                file_put_contents($path, $config_file_content);
+            }
         }
 
         return true;
