@@ -20,33 +20,33 @@ interface SettingsControllerContract
      *         {"passport": {}},
      *      },
      *     @OA\Parameter(
-    *          name="group",
-    *          required=false,
-    *          in="query",
-    *          @OA\Schema(
-    *              type="string",
-    *          ),
-    *      ),
-    *      @OA\Parameter(
-    *          name="page",
-    *          description="Pagination Page Number",
-    *          required=false,
-    *          in="query",
-    *          @OA\Schema(
-    *              type="number",
-    *               default=1,
-    *          ),
-    *      ),
-    *      @OA\Parameter(
-    *          name="per_page",
-    *          description="Pagination Per Page",
-    *          required=false,
-    *          in="query",
-    *          @OA\Schema(
-    *              type="number",
-    *               default=15,
-    *          ),
-    *      ),
+     *          name="group",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          description="Pagination Page Number",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number",
+     *               default=1,
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="per_page",
+     *          description="Pagination Per Page",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number",
+     *               default=15,
+     *          ),
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="successful operation",
@@ -64,8 +64,6 @@ interface SettingsControllerContract
      *   )
      */
     public function index(SettingsListRequest $request): JsonResponse;
-
-
 
     /**
      * @OA\Get(

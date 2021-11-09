@@ -15,13 +15,15 @@ class PermissionTableSeeder extends Seeder
         // create permissions
         $admin = Role::findOrCreate(UserRole::ADMIN, 'api');
 
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_MANAGE,'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_MANAGE, 'api');
         //
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_CREATE,'api');
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_DELETE,'api');
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_UPDATE,'api');
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_READ,'api');
-        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_LIST,'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_CREATE, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_DELETE, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_UPDATE, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_READ, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_LIST, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::CONFIG_LIST, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::CONFIG_UPDATE, 'api');
 
         $admin->givePermissionTo([
             SettingsPermissionsEnum::SETTINGS_MANAGE,
@@ -30,6 +32,8 @@ class PermissionTableSeeder extends Seeder
             SettingsPermissionsEnum::SETTINGS_UPDATE,
             SettingsPermissionsEnum::SETTINGS_READ,
             SettingsPermissionsEnum::SETTINGS_LIST,
+            SettingsPermissionsEnum::CONFIG_LIST,
+            SettingsPermissionsEnum::CONFIG_UPDATE,
         ]);
     }
 }

@@ -13,10 +13,16 @@
         "orchestra/testbench": ">=5.0"
     },
     "license": "Apache-2.0",
-    "authors": [{
-        "name": "Mateusz Wojczal",
-        "email": "mateusz@escolasoft.pl"
-    }],
+    "authors": [
+        {
+            "name": "Mateusz Wojczal",
+            "email": "mateusz@escolasoft.pl"
+        },
+        {
+            "name": "Paweł Chołaj",
+            "email": "pawel.cholaj@escolasoft.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "EscolaLms\\Settings\\": "src",

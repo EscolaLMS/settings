@@ -45,7 +45,7 @@ class SettingsService implements SettingsServiceContract
         return $query->paginate($per_page ?? 15);
     }
 
-    public function groups():Collection
+    public function groups(): Collection
     {
         return DB::table('settings')->select('group')->distinct()->get()->pluck('group');
     }

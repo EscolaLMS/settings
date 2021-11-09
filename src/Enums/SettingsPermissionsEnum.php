@@ -8,10 +8,12 @@ class SettingsPermissionsEnum extends BasicEnum
 {
     const SETTINGS_MANAGE = 'settings manage';
     //
-    const SETTINGS_CREATE      = 'settings create';
-    const SETTINGS_DELETE      = 'settings delete';
-    const SETTINGS_UPDATE      = 'settings update';
-    const SETTINGS_READ        = 'settings read';
-    const SETTINGS_LIST        = 'settings list any';
-
+    const SETTINGS_CREATE = 'settings create';
+    const SETTINGS_DELETE = 'settings delete';
+    const SETTINGS_UPDATE = 'settings update';
+    const SETTINGS_READ   = 'settings read';
+    const SETTINGS_LIST   = 'settings list any';
+    //
+    const CONFIG_LIST     = 'config list';
+    const CONFIG_UPDATE   = 'config update';
 }
