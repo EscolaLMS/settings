@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use EscolaLms\Settings\ConfigRewriter\FileRewriter;
 use Illuminate\Validation\ValidationException;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Models\Config as ModelsConfig;
@@ -208,10 +209,17 @@ class ConfigServiceTest extends TestCase
         $this->assertEmpty(AdministrableConfig::getConfig('test_config_file.key_does_not_exist'));
     }
 
-    public function test_rewriter_exception_on_missing_key()
+    public function test_config_rewriter_exception_on_missing_key()
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Config file 'escola_settings' does not exist or doesn't have key 'test_key'");
         Config::write('escola_settings.test_key', 'test_value');
+    }
+
+    public function test_file_rewriter_exception_on_missing_key()
+    {
+        $this->expectException(Exception::class);
+        $fr = new FileRewriter();
+        $fr->toContent("<?php ['bar'=>'foo'];", ["foo" => "bar"]);
     }
 }
