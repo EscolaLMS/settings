@@ -27,13 +27,9 @@ use Exception;
  */
 class FileRewriter
 {
-    public function toContent(string $contents, array $newValues, bool $useValidation = true): string
+    public function toContent(string $contents, array $newValues): string
     {
         $contents = $this->parseContent($contents, $newValues);
-
-        if (!$useValidation) {
-            return $contents;
-        }
 
         $result = eval('?>' . $contents);
 

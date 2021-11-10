@@ -22,6 +22,11 @@ class ConfigServiceTest extends TestCase
 
         AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string'], false, true);
         AdministrableConfig::registerConfig('test_config_file.test_key2', ['required', 'string'], true, false);
+
+        $config = AdministrableConfig::getConfig();
+        $this->assertEquals('test_value', $config['test_config_file.test_key']['value']);
+        $this->assertEquals('test_value', $config['test_config_file.test_key2']['value']);
+
         AdministrableConfig::setConfig([
             'test_config_file.test_key' => 'foobar',
             'test_config_file.test_key2' => 'foobar'
@@ -49,29 +54,48 @@ class ConfigServiceTest extends TestCase
         }
     }
 
+    /**
+     * Commented out lines make ConfigRewriter & FileRewriter explode
+     */
     public function test_store_to_files()
     {
         $path = App::configPath('test_config_file.php');
 
         if (file_exists($path)) {
             unlink($path);
+            Config::set('test_config_file', []);
         }
 
         Config::set('escola_settings.use_database', false);
 
         Config::set('test_config_file.test_key', 'test_value');
         Config::set('test_config_file.test_key2', 'test_value');
+        Config::set('test_config_file.test_key3', 'test"value');
+        //Config::set('test_config_file.test_key4', "test'value");
+        //Config::set('test_config_file.test_key5', 'test"value' . "test'value");
         Config::set('test_config_file.test_key_bool', false);
         Config::set('test_config_file.test_key_array', [21, 37, 69, 420]);
+        Config::set('test_config_file.test_key_array2', ["foo'bar", 'bar"foo']);
+        //Config::set('test_config_file.test_key_array3', [['id' => 1], ['id' => 2]]);
+        Config::set('test_config_file.test_key_object.id', 1);
+        Config::set('test_config_file.test_key_object.tags', ['foo', 'bar']);
         Config::set('test_config_file.test_key_null', null);
         Config::set('test_config_file.test_key_integer', 1337);
 
         AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string'], false, true);
         AdministrableConfig::registerConfig('test_config_file.test_key2', ['required', 'string'], false);
+        AdministrableConfig::registerConfig('test_config_file.test_key3', ['required', 'string']);
+        //AdministrableConfig::registerConfig('test_config_file.test_key4', ['required', 'string']);
+        //AdministrableConfig::registerConfig('test_config_file.test_key5', ['required', 'string']);
         AdministrableConfig::registerConfig('test_config_file.test_key_bool', ['required', 'boolean']);
         AdministrableConfig::registerConfig('test_config_file.test_key_array', ['required', 'array']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_array2', ['required', 'array']);
+        //AdministrableConfig::registerConfig('test_config_file.test_key_array3', ['required', 'array']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_object.id', ['required', 'integer']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_object.tags', ['required', 'array']);
         AdministrableConfig::registerConfig('test_config_file.test_key_null', ['required', 'nullable', 'integer']);
         AdministrableConfig::registerConfig('test_config_file.test_key_integer', ['required', 'integer']);
+
         AdministrableConfig::setConfig([
             'test_config_file.test_key' => 'foobar',
             'test_config_file.test_key2' => 'foobar'
@@ -84,8 +108,11 @@ class ConfigServiceTest extends TestCase
         $vars = eval('?>' . $file_content);
         $this->assertEquals('test_value', $vars['test_key']);
         $this->assertEquals('foobar', $vars['test_key2']);
+        $this->assertEquals('test"value', $vars['test_key3']);
         $this->assertEquals(false, $vars['test_key_bool']);
         $this->assertEquals([21, 37, 69, 420], $vars['test_key_array']);
+        $this->assertEquals(["foo'bar", 'bar"foo'], $vars['test_key_array2']);
+        $this->assertEquals(['id' => 1, 'tags' => ['foo', 'bar']], $vars['test_key_object']);
         $this->assertEquals(null, $vars['test_key_null']);
         $this->assertEquals(1337, $vars['test_key_integer']);
 
@@ -99,8 +126,11 @@ class ConfigServiceTest extends TestCase
         $vars = eval('?>' . $file_content);
         $this->assertEquals('test_value', $vars['test_key']);
         $this->assertEquals('foobar2', $vars['test_key2']);
+        $this->assertEquals('test"value', $vars['test_key3']);
         $this->assertEquals(false, $vars['test_key_bool']);
         $this->assertEquals([21, 37, 69, 420], $vars['test_key_array']);
+        $this->assertEquals(["foo'bar", 'bar"foo'], $vars['test_key_array2']);
+        $this->assertEquals(['id' => 1, 'tags' => ['foo', 'bar']], $vars['test_key_object']);
         $this->assertEquals(null, $vars['test_key_null']);
         $this->assertEquals(1337, $vars['test_key_integer']);
     }
