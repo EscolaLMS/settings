@@ -6,6 +6,7 @@ use Illuminate\Validation\ValidationException;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Models\Config as ModelsConfig;
 use EscolaLms\Settings\Tests\TestCase;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -50,26 +51,43 @@ class ConfigServiceTest extends TestCase
 
     public function test_store_to_files()
     {
+        $path = App::configPath('test_config_file.php');
+
+        if (file_exists($path)) {
+            unlink($path);
+        }
+
         Config::set('escola_settings.use_database', false);
 
         Config::set('test_config_file.test_key', 'test_value');
         Config::set('test_config_file.test_key2', 'test_value');
+        Config::set('test_config_file.test_key_bool', false);
+        Config::set('test_config_file.test_key_array', [21, 37, 69, 420]);
+        Config::set('test_config_file.test_key_null', null);
+        Config::set('test_config_file.test_key_integer', 1337);
 
         AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string'], false, true);
         AdministrableConfig::registerConfig('test_config_file.test_key2', ['required', 'string'], false);
+        AdministrableConfig::registerConfig('test_config_file.test_key_bool', ['required', 'boolean']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_array', ['required', 'array']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_null', ['required', 'nullable', 'integer']);
+        AdministrableConfig::registerConfig('test_config_file.test_key_integer', ['required', 'integer']);
         AdministrableConfig::setConfig([
             'test_config_file.test_key' => 'foobar',
             'test_config_file.test_key2' => 'foobar'
         ]);
         AdministrableConfig::storeConfig();
 
-        $path = App::configPath('test_config_file.php');
         $this->assertTrue(file_exists($path));
 
         $file_content = file_get_contents($path);
         $vars = eval('?>' . $file_content);
         $this->assertEquals('test_value', $vars['test_key']);
         $this->assertEquals('foobar', $vars['test_key2']);
+        $this->assertEquals(false, $vars['test_key_bool']);
+        $this->assertEquals([21, 37, 69, 420], $vars['test_key_array']);
+        $this->assertEquals(null, $vars['test_key_null']);
+        $this->assertEquals(1337, $vars['test_key_integer']);
 
         AdministrableConfig::setConfig([
             'test_config_file.test_key' => 'foobar2',
@@ -81,6 +99,10 @@ class ConfigServiceTest extends TestCase
         $vars = eval('?>' . $file_content);
         $this->assertEquals('test_value', $vars['test_key']);
         $this->assertEquals('foobar2', $vars['test_key2']);
+        $this->assertEquals(false, $vars['test_key_bool']);
+        $this->assertEquals([21, 37, 69, 420], $vars['test_key_array']);
+        $this->assertEquals(null, $vars['test_key_null']);
+        $this->assertEquals(1337, $vars['test_key_integer']);
     }
 
     public function test_store_to_database()
@@ -142,5 +164,22 @@ class ConfigServiceTest extends TestCase
         $config = AdministrableConfig::getPublicConfig();
         $this->assertEquals('test_value', $config['test_config_file.test_key']);
         $this->assertEquals('test_value', Config::get('test_config_file.test_key'));
+    }
+
+    public function test_get_single_config_key()
+    {
+        Config::set('test_config_file.test_key', 'test_value');
+        AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string']);
+        $config = AdministrableConfig::getConfig('test_config_file.test_key');
+        $this->assertEquals('test_value', $config['value']);
+        $this->assertEquals(true, $config['public']);
+        $this->assertEquals(false, $config['readonly']);
+    }
+
+    public function test_rewriter_exception_on_missing_key()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Config file 'escola_settings' does not exist or doesn't have key 'test_key'");
+        Config::write('escola_settings.test_key', 'test_value');
     }
 }

@@ -122,10 +122,10 @@ class SettingsAdminTest extends TestCase
 
         $this->response = $this->actingAs($this->user, 'api')->json(
             'PUT',
-            '/api/admin/settings/'.$setting->id,
+            '/api/admin/settings/' . $setting->id,
             $input
         );
-        
+
         $this->response->assertOk();
 
         $this->assertEquals($input['value'], $this->response->getData()->data->value);
@@ -155,7 +155,7 @@ class SettingsAdminTest extends TestCase
             '/api/admin/settings',
             $input
         );
-        
+
         $this->response->assertOk();
 
         $this->assertEquals($input['value'], $this->response->getData()->data->value);
@@ -167,17 +167,16 @@ class SettingsAdminTest extends TestCase
 
         $this->response = $this->actingAs($this->user, 'api')->json(
             'DELETE',
-            '/api/admin/settings/'.$setting->id,
+            '/api/admin/settings/' . $setting->id,
         );
-        
+
         $this->response->assertOk();
 
         $this->response = $this->actingAs($this->user, 'api')->json(
             'DELETE',
-            '/api/admin/settings/'.$setting->id,
+            '/api/admin/settings/' . $setting->id,
         );
-        
-        $this->response->assertNotFound();
 
+        $this->response->assertNotFound();
     }
 }

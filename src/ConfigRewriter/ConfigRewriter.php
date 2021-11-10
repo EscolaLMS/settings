@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Settings\ConfigRewriter;
 
+use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 
@@ -51,11 +52,12 @@ class ConfigRewriter
     {
         $file = "{$this->defaultPath}/{$filename}{$ext}";
 
-        if ($this->files->exists($file) && $this->hasKey($file, $item)) {
-            return $file;
+        if (!$this->files->exists($file) || !$this->hasKey($file, $item)) {
+            // Current rewriter code can not be used to add new keys to files
+            throw new Exception("Config file '{$filename}' does not exist or doesn't have key '{$item}'");
         }
 
-        return null;
+        return $file;
     }
 
     private function hasKey(string $path, string $key): bool

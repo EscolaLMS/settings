@@ -27,15 +27,6 @@ use Exception;
  */
 class FileRewriter
 {
-    public function toFile(string $filePath, array $newValues, bool $useValidation = true): string
-    {
-        $contents = file_get_contents($filePath);
-        $contents = $this->toContent($contents, $newValues, $useValidation);
-        file_put_contents($filePath, $contents);
-
-        return $contents;
-    }
-
     public function toContent(string $contents, array $newValues, bool $useValidation = true): string
     {
         $contents = $this->parseContent($contents, $newValues);
@@ -124,7 +115,7 @@ class FileRewriter
         return $replaceValue;
     }
 
-    protected function writeArrayToPhp(array $array): array
+    protected function writeArrayToPhp(array $array): string
     {
         $result = [];
 
@@ -135,8 +126,6 @@ class FileRewriter
         }
 
         return '[' . implode(', ', $result) . ']';
-
-        return $result;
     }
 
     protected function buildStringExpression(string $targetKey, array $arrayItems = [], string $quoteChar = "'"): string
