@@ -10,19 +10,14 @@ use EscolaLms\Settings\Http\Requests\Admin\SettingsDeleteRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsListRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsReadRequest;
 use EscolaLms\Settings\Http\Requests\Admin\SettingsUpdateRequest;
+use EscolaLms\Settings\Http\Resources\SettingResource;
 use EscolaLms\Settings\Repositories\Contracts\SettingsRepositoryContract;
 use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
-use EscolaLms\Settings\Http\Resources\SettingResource;
 
 use Error;
 use Illuminate\Http\JsonResponse;
 
-/**
- * Class LessonController
- * @package App\Http\Controllers
- */
-
-class SettingsController extends EscolaLmsBaseController  implements SettingsControllerContract
+class SettingsController extends EscolaLmsBaseController implements SettingsControllerContract
 {
     private SettingsRepositoryContract $repository;
     private SettingsServiceContract $service;

@@ -2,31 +2,71 @@
 
 namespace EscolaLms\Settings;
 
-use Illuminate\Support\ServiceProvider;
-use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
-use EscolaLms\Settings\Services\SettingsService;
+use EscolaLms\Settings\AuthServiceProvider;
+use EscolaLms\Settings\ConfigRewriter\ConfigRepositoryExtension;
+use EscolaLms\Settings\ConfigRewriter\ConfigRewriter;
+use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Repositories\Contracts\SettingsRepositoryContract;
 use EscolaLms\Settings\Repositories\SettingsRepository;
-use EscolaLms\Settings\AuthServiceProvider;
+use EscolaLms\Settings\Services\AdministrableConfigService;
+use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
+use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
+use EscolaLms\Settings\Services\SettingsService;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * SWAGGER_VERSION
  */
-
 class EscolaLmsSettingsServiceProvider extends ServiceProvider
 {
     public $singletons = [
         SettingsRepositoryContract::class => SettingsRepository::class,
         SettingsServiceContract::class => SettingsService::class,
+        AdministrableConfigServiceContract::class => AdministrableConfigService::class,
     ];
+
+    public $bindings = [];
 
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->bootForConsole();
+        }
+
+        AdministrableConfig::loadConfigFromDatabase();
     }
 
-    public function register() {
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/config.php', 'escola_settings');
+
         $this->app->register(AuthServiceProvider::class);
+
+        $this->app->bind('escola_config_facade', function () {
+            return new AdministrableConfigService();
+        });
+
+        $this->app->singleton(ConfigRepositoryExtension::class, function ($app, $items) {
+            $writer = new ConfigRewriter(resolve('files'), App::configPath());
+            return new ConfigRepositoryExtension($writer, $items);
+        });
+
+        $this->app->extend('config', function ($config, $app) {
+            $config_items = $config->all();
+            return $app->make(ConfigRepositoryExtension::class, $config_items);
+        });
+    }
+
+    protected function bootForConsole(): void
+    {
+        $this->publishes([
+            __DIR__ . '/config.php' => config_path('escola_settings.php'),
+        ], 'escola_settings.config');
     }
 }
