@@ -5,6 +5,44 @@
         "version": "0.0.1"
     },
     "paths": {
+        "/api/admin/config": {
+            "get": {
+                "tags": [
+                    "Admin Settings"
+                ],
+                "summary": "Get admin config",
+                "description": "Get a listing of registered config keys",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Settings"
+                ],
+                "summary": "Set config for registered config keys",
+                "operationId": "e4b582c031121b9188d65e35da218c7a",
+                "requestBody": {},
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/admin/settings": {
             "get": {
                 "tags": [
@@ -208,6 +246,23 @@
                         "passport": []
                     }
                 ]
+            }
+        },
+        "/api/config": {
+            "get": {
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Get a listing of public config values.",
+                "description": "Get public config values",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
             }
         },
         "/api/settings": {
