@@ -204,6 +204,8 @@ class ConfigServiceTest extends TestCase
         $this->assertEquals('test_value', $config['value']);
         $this->assertEquals(true, $config['public']);
         $this->assertEquals(false, $config['readonly']);
+
+        $this->assertEmpty(AdministrableConfig::getConfig('test_config_file.key_does_not_exist'));
     }
 
     public function test_rewriter_exception_on_missing_key()
