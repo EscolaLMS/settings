@@ -153,7 +153,7 @@ class ConfigServiceTest extends TestCase
 
         $model = ModelsConfig::find(1);
         $this->assertNotNull($model);
-        $this->assertEquals('foobar', $model->value['test_config_file']['test_key2']);
+        $this->assertEquals('foobar', $model->value['test_config_file.test_key2']);
         $this->assertArrayNotHasKey('test_config_file.test_key', $model->value);
     }
 
@@ -165,7 +165,7 @@ class ConfigServiceTest extends TestCase
         AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string']);
 
         $config = AdministrableConfig::getPublicConfig();
-        $this->assertEquals('test_value', $config['test_config_file.test_key']);
+        $this->assertEquals('test_value', $config['test_config_file']['test_key']);
         $this->assertEquals('test_value', Config::get('test_config_file.test_key'));
 
         $model = ModelsConfig::create(['id' => 1, 'value' => ['test_config_file.test_key' => 'foobar']]);
@@ -173,7 +173,7 @@ class ConfigServiceTest extends TestCase
         $this->assertTrue(AdministrableConfig::loadConfigFromDatabase(true));
 
         $config = AdministrableConfig::getPublicConfig();
-        $this->assertEquals('foobar', $config['test_config_file.test_key']);
+        $this->assertEquals('foobar', $config['test_config_file']['test_key']);
         $this->assertEquals('foobar', Config::get('test_config_file.test_key'));
     }
 
