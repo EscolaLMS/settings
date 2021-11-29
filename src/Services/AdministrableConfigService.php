@@ -128,8 +128,6 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
             return [];
         }
 
-        return [];
-
         return $this->undot(array_merge($this->administrableConfig[$key], ['value' => Config::get($key)]));
     }
 
