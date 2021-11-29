@@ -38,12 +38,12 @@ class ConfigApiTest extends TestCase
         $this->response->assertOk();
         $this->response->assertJsonFragment([
             'data' => [
-                'test_config_file.test_key2' => 'test_value'
+                'test_config_file' => ['test_key2' => 'test_value']
             ]
         ]);
         $this->response->assertJsonMissing([
             'data' => [
-                'test_config_file.test_key' => 'test_value'
+                'test_config_file' => ['test_key' => 'test_value']
             ]
         ]);
     }
@@ -57,23 +57,25 @@ class ConfigApiTest extends TestCase
         $this->response->assertOk();
         $this->response->assertJsonFragment([
             'data' => [
-                'test_config_file.test_key' => [
-                    'rules' => [
-                        'required',
-                        'string'
+                'test_config_file' => [
+                    'test_key' => [
+                        'rules' => [
+                            'required',
+                            'string'
+                        ],
+                        'value' => 'test_value',
+                        'readonly' => true,
+                        'public' => false,
                     ],
-                    'value' => 'test_value',
-                    'readonly' => true,
-                    'public' => false,
-                ],
-                'test_config_file.test_key2' => [
-                    'rules' => [
-                        'required',
-                        'string'
-                    ],
-                    'value' => 'test_value',
-                    'readonly' => false,
-                    'public' => true,
+                    'test_key2' => [
+                        'rules' => [
+                            'required',
+                            'string'
+                        ],
+                        'value' => 'test_value',
+                        'readonly' => false,
+                        'public' => true,
+                    ]
                 ]
             ]
         ]);
@@ -100,23 +102,25 @@ class ConfigApiTest extends TestCase
         $this->response->assertOk();
         $this->response->assertJsonFragment([
             'data' => [
-                'test_config_file.test_key' => [
-                    'rules' => [
-                        'required',
-                        'string'
+                'test_config_file' => [
+                    'test_key' => [
+                        'rules' => [
+                            'required',
+                            'string'
+                        ],
+                        'value' => 'test_value',
+                        'readonly' => true,
+                        'public' => false,
                     ],
-                    'value' => 'test_value',
-                    'readonly' => true,
-                    'public' => false,
-                ],
-                'test_config_file.test_key2' => [
-                    'rules' => [
-                        'required',
-                        'string'
-                    ],
-                    'value' => 'foobar',
-                    'readonly' => false,
-                    'public' => true,
+                    'test_key2' => [
+                        'rules' => [
+                            'required',
+                            'string'
+                        ],
+                        'value' => 'foobar',
+                        'readonly' => false,
+                        'public' => true,
+                    ]
                 ]
             ]
         ]);
