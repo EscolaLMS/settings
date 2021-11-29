@@ -25,8 +25,8 @@ class ConfigServiceTest extends TestCase
         AdministrableConfig::registerConfig('test_config_file.test_key2', ['required', 'string'], true, false);
 
         $config = AdministrableConfig::getConfig();
-        $this->assertEquals('test_value', $config['test_config_file.test_key']['value']);
-        $this->assertEquals('test_value', $config['test_config_file.test_key2']['value']);
+        $this->assertEquals('test_value', $config['test_config_file']['test_key']['value']);
+        $this->assertEquals('test_value', $config['test_config_file']['test_key2']['value']);
 
         AdministrableConfig::setConfig([
             'test_config_file.test_key' => 'foobar',
@@ -34,15 +34,15 @@ class ConfigServiceTest extends TestCase
         ]);
 
         $config = AdministrableConfig::getConfig();
-        $this->assertEquals('test_value', $config['test_config_file.test_key']['value']);
-        $this->assertEquals(false, $config['test_config_file.test_key']['public']);
-        $this->assertEquals(true, $config['test_config_file.test_key']['readonly']);
-        $this->assertEquals('foobar', $config['test_config_file.test_key2']['value']);
-        $this->assertEquals(true, $config['test_config_file.test_key2']['public']);
-        $this->assertEquals(false, $config['test_config_file.test_key2']['readonly']);
+        $this->assertEquals('test_value', $config['test_config_file']['test_key']['value']);
+        $this->assertEquals(false, $config['test_config_file']['test_key']['public']);
+        $this->assertEquals(true, $config['test_config_file']['test_key']['readonly']);
+        $this->assertEquals('foobar', $config['test_config_file']['test_key2']['value']);
+        $this->assertEquals(true, $config['test_config_file']['test_key2']['public']);
+        $this->assertEquals(false, $config['test_config_file']['test_key2']['readonly']);
 
         $publicConfig = AdministrableConfig::getPublicConfig();
-        $this->assertEquals('foobar', $publicConfig['test_config_file.test_key2']);
+        $this->assertEquals('foobar', $publicConfig['test_config_file']['test_key2']);
         $this->assertArrayNotHasKey('test_config_file.test_key', $publicConfig);
 
         try {
