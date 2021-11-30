@@ -121,19 +121,19 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
             foreach ($this->administrableConfig as $index => $value) {
                 $result[$index] = array_merge($value, ['value' => Config::get($index)]);
             }
-            return $result;
+            return $this->undot($result);
         }
 
         if (!array_key_exists($key, $this->administrableConfig)) {
             return [];
         }
 
-        return array_merge($this->administrableConfig[$key], ['value' => Config::get($key)]);
+        return $this->undot(array_merge($this->administrableConfig[$key], ['value' => Config::get($key)]));
     }
 
     public function getPublicConfig(): array
     {
-        return $this->mapKeysToConfigValues($this->getPublicKeys());
+        return $this->undot($this->mapKeysToConfigValues($this->getPublicKeys()));
     }
 
     private function getPublicKeys(): array
@@ -151,7 +151,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $result = [];
         foreach ($keys as $key) {
             $result[$key] = Config::get($key);
-        }
+        }        
         return $result;
     }
 
