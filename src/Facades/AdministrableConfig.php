@@ -2,6 +2,7 @@
 
 namespace EscolaLms\Settings\Facades;
 
+use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -18,6 +19,6 @@ class AdministrableConfig extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'escola_config_facade';
+        return AdministrableConfigServiceContract::class;
     }
 }

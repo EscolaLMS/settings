@@ -12,9 +12,7 @@ use EscolaLms\Settings\Services\AdministrableConfigService;
 use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
 use EscolaLms\Settings\Services\SettingsService;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -47,10 +45,6 @@ class EscolaLmsSettingsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config.php', 'escola_settings');
 
         $this->app->register(AuthServiceProvider::class);
-
-        $this->app->bind('escola_config_facade', function () {
-            return new AdministrableConfigService();
-        });
 
         $this->app->singleton(ConfigRepositoryExtension::class, function ($app, $items) {
             $writer = new ConfigRewriter(resolve('files'), App::configPath());

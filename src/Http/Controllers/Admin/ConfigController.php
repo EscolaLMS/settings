@@ -19,6 +19,7 @@ class ConfigController extends EscolaLmsBaseController implements ConfigControll
     public function update(ConfigUpdateRequest $request): JsonResponse
     {
         AdministrableConfig::setConfig($request->input('config'));
+        AdministrableConfig::storeConfig();
         return $this->sendResponse(AdministrableConfig::getConfig());
     }
 }
