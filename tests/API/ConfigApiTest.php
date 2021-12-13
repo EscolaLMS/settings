@@ -88,7 +88,9 @@ class ConfigApiTest extends TestCase
             '/api/config'
         );
         $this->response->assertJsonMissing([
-            'test_config_file.test_key2' => 'foobar',
+            'test_config_file' => [
+                'test_key2' => 'foobar'
+            ]
         ]);
 
         $this->response = $this->actingAs($this->user, 'api')->json(
@@ -115,7 +117,9 @@ class ConfigApiTest extends TestCase
         );
         $this->response->assertOk();
         $this->response->assertJsonFragment([
-            'test_config_file.test_key2' => 'foobar',
+            'test_config_file' => [
+                'test_key2' => 'foobar',
+            ]
         ]);
 
         $this->response = $this->actingAs($this->user, 'api')->json(
