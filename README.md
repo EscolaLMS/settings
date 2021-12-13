@@ -13,7 +13,7 @@ See swagger for details
 
 ## Administration of Registered Config Keys
 
-This package can be used to enable Admin to change Application config values.
+This package can be used to enable Admins to change Application config values using API.
 
 Every package can register config keys by calling `registerConfig` static method from `AdministrableConfig` Facade in its own Package Service Provider `register` method.
 
