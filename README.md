@@ -13,7 +13,7 @@ See swagger for details
 
 ## Administration of Registered Config Keys
 
-This package can be used to enable Admin to change Application config values.
+This package can be used to enable Admins to change Application config values using API.
 
 Every package can register config keys by calling `registerConfig` static method from `AdministrableConfig` Facade in its own Package Service Provider `register` method.
 
@@ -35,3 +35,8 @@ When registering a configuration key you can:
 -   specify validation rules for values that can be stored
 -   specify if key is `public` (so anonymous users can retrieve the value)
 -   specify if key is `readonly` (so it is returned by API but can not be changed using API)
+
+## Configuration
+
+Publish config file using `php artisan vendor:publish --tag=escola_settings.config`.
+Config file contains `use_database` option, which determines if Config should be written and loaded to database (if `true`), or config files should be overwritten (if `false`);

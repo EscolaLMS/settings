@@ -53,6 +53,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         // this is needed if config file was not published, or in case of tests - if we are testing dynamicaly created config keys not based on existing config file
         $config_undotted = $this->undot($config);
         foreach ($config_undotted as $master_key => $value) {
+            $path = App::configPath($master_key . '.php');
             $config_array = Config::get($master_key);
             $config_file_content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config_array, true) . ';';
             file_put_contents($path, $config_file_content);

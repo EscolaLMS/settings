@@ -83,6 +83,16 @@ class ConfigApiTest extends TestCase
 
     public function test_update()
     {
+        $this->response = $this->json(
+            'GET',
+            '/api/config'
+        );
+        $this->response->assertJsonMissing([
+            'test_config_file' => [
+                'test_key2' => 'foobar'
+            ]
+        ]);
+
         $this->response = $this->actingAs($this->user, 'api')->json(
             'POST',
             '/api/admin/config',
@@ -98,6 +108,23 @@ class ConfigApiTest extends TestCase
                     ]
                 ]
             ]
+        );
+        $this->response->assertOk();
+
+        $this->response = $this->json(
+            'GET',
+            '/api/config'
+        );
+        $this->response->assertOk();
+        $this->response->assertJsonFragment([
+            'test_config_file' => [
+                'test_key2' => 'foobar',
+            ]
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'GET',
+            '/api/admin/config'
         );
         $this->response->assertOk();
         $this->response->assertJsonFragment([
