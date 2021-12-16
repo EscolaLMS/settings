@@ -2,8 +2,6 @@
 
 namespace EscolaLms\Settings\Tests;
 
-
-use EscolaLms\Settings\AuthServiceProvider;
 use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
 use EscolaLms\Settings\EscolaLmsSettingsServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -26,10 +24,9 @@ class TestCase extends \EscolaLms\Core\Tests\TestCase
     {
         return [
             ...parent::getPackageProviders($app),
-            EscolaLmsSettingsServiceProvider::class,
             PassportServiceProvider::class,
             PermissionServiceProvider::class,
-            AuthServiceProvider::class
+            EscolaLmsSettingsServiceProvider::class
         ];
     }
 
