@@ -41,7 +41,7 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
 
         $setting = $this->repository->create($input);
 
-        return $this->sendResponse($setting->toArray(), 'Setting saved successfully');
+        return $this->sendResponse($setting->toArray(), __('Setting saved successfully'));
     }
 
     public function show($id, SettingsReadRequest $request): JsonResponse
@@ -50,10 +50,10 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
         $setting = $this->repository->find($id);
 
         if (empty($setting)) {
-            return $this->sendError('Setting not found', 404);
+            return $this->sendError(__('Setting not found'), 404);
         }
 
-        return $this->sendResponse($setting->toArray(), 'Setting retrieved successfully');
+        return $this->sendResponse($setting->toArray(), __('Setting retrieved successfully'));
     }
 
     public function update($id, SettingsUpdateRequest $request): JsonResponse
@@ -63,12 +63,12 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
         $setting = $this->repository->find($id);
 
         if (empty($setting)) {
-            return $this->sendError('Setting not found');
+            return $this->sendError(__('Setting not found'));
         }
 
         $setting = $this->repository->update($input, $id);
 
-        return $this->sendResponse($setting->toArray(), 'Setting updated successfully');
+        return $this->sendResponse($setting->toArray(), __('Setting updated successfully'));
     }
 
     public function destroy($id, SettingsDeleteRequest $request): JsonResponse
@@ -76,12 +76,12 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
         $setting = $this->repository->find($id);
 
         if (empty($setting)) {
-            return $this->sendError('Setting not found');
+            return $this->sendError(__('Setting not found'));
         }
 
         $this->repository->delete($id);
 
-        return $this->sendSuccess('Setting deleted successfully');
+        return $this->sendSuccess(__('Setting deleted successfully'));
     }
 
     public function groups(SettingsListRequest $request): JsonResponse
@@ -89,6 +89,6 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
 
         $groups = $this->service->groups();
 
-        return $this->sendResponse($groups->toArray(), 'Settings groups retrieved successfully');
+        return $this->sendResponse($groups->toArray(), __('Settings groups retrieved successfully'));
     }
 }
