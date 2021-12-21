@@ -47,7 +47,10 @@ class FileRewriter
             $actualValue = $array;
 
             if ($actualValue != $expectedValue) {
-                throw new Exception(sprintf('Unable to rewrite key "%s" in config, rewrite failed', $key));
+                throw new Exception(__(
+                    'Unable to rewrite key ":key" in config, rewrite failed. Expected value = :expected; actual value = :actual',
+                    ['key' => $key, 'expected' => json_encode($expectedValue), 'actual' => json_encode($actualValue)]
+                ));
             }
         }
 
