@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -74,7 +75,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
 
     public function loadConfigFromDatabase(bool $forced = false): bool
     {
-        if (Config::get('escola_settings.use_database', false) || $forced) {
+        if ((Config::get('escola_settings.use_database', false) || $forced) && Schema::hasTable('config')) {
             $configModel = ModelsConfig::query()->find(1);
             if (!is_null($configModel)) {
                 $config = $configModel->value;
@@ -152,7 +153,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         $result = [];
         foreach ($keys as $key) {
             $result[$key] = Config::get($key);
-        }        
+        }
         return $result;
     }
 
