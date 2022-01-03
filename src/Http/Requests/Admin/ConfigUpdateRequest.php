@@ -17,7 +17,7 @@ class ConfigUpdateRequest extends FormRequest
         return [
             'config' => ['required', 'array'],
             'config.*.key' => ['required', 'string'],
-            'config.*.value' => ['required', 'nullable']
+            'config.*.value' => ['present', 'nullable']
         ];
     }
 }
