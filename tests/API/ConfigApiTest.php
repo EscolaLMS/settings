@@ -59,6 +59,7 @@ class ConfigApiTest extends TestCase
             'data' => [
                 'test_config_file' => [
                     'test_key' => [
+                        'key' => 'test_config_file.test_key',
                         'rules' => [
                             'required',
                             'string'
@@ -68,6 +69,7 @@ class ConfigApiTest extends TestCase
                         'public' => false,
                     ],
                     'test_key2' => [
+                        'key' => 'test_config_file.test_key2',
                         'rules' => [
                             'required',
                             'string'
@@ -131,6 +133,7 @@ class ConfigApiTest extends TestCase
             'data' => [
                 'test_config_file' => [
                     'test_key' => [
+                        'key' => 'test_config_file.test_key',
                         'rules' => [
                             'required',
                             'string'
@@ -140,6 +143,7 @@ class ConfigApiTest extends TestCase
                         'public' => false,
                     ],
                     'test_key2' => [
+                        'key' => 'test_config_file.test_key2',
                         'rules' => [
                             'required',
                             'string'

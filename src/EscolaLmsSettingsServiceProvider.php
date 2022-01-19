@@ -37,7 +37,9 @@ class EscolaLmsSettingsServiceProvider extends ServiceProvider
             $this->bootForConsole();
         }
 
-        AdministrableConfig::loadConfigFromDatabase();
+        if (!AdministrableConfig::loadConfigFromCache()) {
+            AdministrableConfig::loadConfigFromDatabase();
+        }
     }
 
     public function register()

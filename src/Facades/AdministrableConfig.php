@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static bool  registerConfig(string $key, array $rules = ['required'], bool $public = true, bool $readonly = false)
  * @method static bool  storeConfig()
+ * @method static bool  loadConfigFromCache()
  * @method static bool  loadConfigFromDatabase()
  * @method static array getPublicConfig()
  * @method static array getConfig(string $key = null)

@@ -11,7 +11,10 @@ interface AdministrableConfigServiceContract
 
     public function getConfig(string $key = null): array;
     public function getPublicConfig(): array;
+
+    public function loadConfigFromCache(): bool;
     public function loadConfigFromDatabase(): bool;
+
     public function setConfig(array $config): void;
     public function storeConfig(): bool;
 }
