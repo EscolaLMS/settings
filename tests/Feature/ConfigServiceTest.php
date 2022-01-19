@@ -3,18 +3,26 @@
 namespace Tests\Feature;
 
 use EscolaLms\Settings\ConfigRewriter\FileRewriter;
-use Illuminate\Validation\ValidationException;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Models\Config as ModelsConfig;
+use EscolaLms\Settings\Services\AdministrableConfigService;
 use EscolaLms\Settings\Tests\TestCase;
 use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Validation\ValidationException;
 
 class ConfigServiceTest extends TestCase
 {
     use DatabaseTransactions;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Cache::forever(AdministrableConfigService::CACHE_KEY, []);
+    }
 
     public function test_register_and_update_config()
     {
@@ -171,6 +179,26 @@ class ConfigServiceTest extends TestCase
         $model = ModelsConfig::create(['id' => 1, 'value' => ['test_config_file.test_key' => 'foobar']]);
 
         $this->assertTrue(AdministrableConfig::loadConfigFromDatabase(true));
+
+        $config = AdministrableConfig::getPublicConfig();
+        $this->assertEquals('foobar', $config['test_config_file']['test_key']);
+        $this->assertEquals('foobar', Config::get('test_config_file.test_key'));
+    }
+
+    public function test_load_from_cache()
+    {
+        Config::set('escola_settings.use_database', true);
+
+        Config::set('test_config_file.test_key', 'test_value');
+        AdministrableConfig::registerConfig('test_config_file.test_key', ['required', 'string']);
+
+        $config = AdministrableConfig::getPublicConfig();
+        $this->assertEquals('test_value', $config['test_config_file']['test_key']);
+        $this->assertEquals('test_value', Config::get('test_config_file.test_key'));
+
+        Cache::forever(AdministrableConfigService::CACHE_KEY, ['test_config_file.test_key' => 'foobar']);
+
+        $this->assertTrue(AdministrableConfig::loadConfigFromCache(true));
 
         $config = AdministrableConfig::getPublicConfig();
         $this->assertEquals('foobar', $config['test_config_file']['test_key']);

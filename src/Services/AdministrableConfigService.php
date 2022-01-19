@@ -7,6 +7,7 @@ use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
@@ -14,11 +15,15 @@ use Illuminate\Validation\ValidationException;
 
 class AdministrableConfigService implements AdministrableConfigServiceContract
 {
+    const CACHE_KEY = 'escolalms_config_cache';
+
     private array $administrableConfig = [];
 
     public function registerConfig(string $key, array $rules = [], bool $public = true, bool $readonly = false): bool
     {
         $this->administrableConfig[$key] = [
+            'full_key' => $key,
+            'key' => Str::after($key, '.'),
             'rules' => $rules,
             'public' => $public,
             'readonly' => $readonly,
@@ -28,9 +33,12 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
 
     public function storeConfig(): bool
     {
+        $this->storeConfigInCache();
+
         if (Config::get('escola_settings.use_database')) {
             return $this->saveConfigToDatabase();
         }
+
         return $this->saveConfigToFiles();
     }
 
@@ -65,12 +73,21 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
 
     private function saveConfigToDatabase(): bool
     {
-        $keys = $this->getNotReadonlyKeys();
-        $config = $this->mapKeysToConfigValues($keys);
-
-        $configModel = ModelsConfig::query()->updateOrCreate(['id' => 1], ['value' => $config]);
+        $configModel = ModelsConfig::query()->updateOrCreate(['id' => 1], ['value' => $this->getWritableConfig()]);
 
         return $configModel->exists;
+    }
+
+    public function loadConfigFromCache(bool $forced = false): bool
+    {
+        if (Config::get('escola_settings.use_database', false) || $forced) {
+            $cache = $this->getConfigFromCache();
+            if (!empty($cache)) {
+                Config::set($cache);
+                return true;
+            }
+        }
+        return false;
     }
 
     public function loadConfigFromDatabase(bool $forced = false): bool
@@ -114,6 +131,8 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
             $key_with_dot = str_replace('__', '.', $key);
             Config::set($key_with_dot, $value);
         }
+
+        $this->storeConfigInCache();
     }
 
     public function getConfig(string $key = null): array
@@ -133,6 +152,16 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
         return $this->undot(array_merge($this->administrableConfig[$key], ['value' => Config::get($key)]));
     }
 
+    private function getConfigFromCache(): array
+    {
+        return Cache::get(self::CACHE_KEY, []);
+    }
+
+    private function storeConfigInCache(): void
+    {
+        Cache::forever(self::CACHE_KEY, $this->getWritableConfig());
+    }
+
     public function getPublicConfig(): array
     {
         return $this->undot($this->mapKeysToConfigValues($this->getPublicKeys()));
@@ -141,6 +170,11 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
     private function getPublicKeys(): array
     {
         return array_keys(array_filter($this->administrableConfig, fn ($config) => $config['public']));
+    }
+
+    private function getWritableConfig(): array
+    {
+        return $this->mapKeysToConfigValues($this->getNotReadonlyKeys());
     }
 
     private function getNotReadonlyKeys(): array
