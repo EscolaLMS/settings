@@ -22,7 +22,8 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
     public function registerConfig(string $key, array $rules = [], bool $public = true, bool $readonly = false): bool
     {
         $this->administrableConfig[$key] = [
-            'key' => $key,
+            'full_key' => $key,
+            'key' => Str::after($key, '.'),
             'rules' => $rules,
             'public' => $public,
             'readonly' => $readonly,
