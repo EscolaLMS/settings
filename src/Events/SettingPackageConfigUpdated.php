@@ -4,7 +4,7 @@ namespace EscolaLms\Settings\Events;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 
-class EscolaLmsSettingPackageConfigUpdatedTemplateEvent
+class SettingPackageConfigUpdated
 {
     private Authenticatable $user;
 

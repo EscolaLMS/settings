@@ -3,6 +3,7 @@
 namespace EscolaLms\Settings\Http\Controllers\Admin;
 
 use EscolaLms\Core\Http\Controllers\EscolaLmsBaseController;
+use EscolaLms\Settings\Events\SettingPackageConfigUpdated;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Http\Controllers\Admin\Swagger\ConfigControllerContract;
 use EscolaLms\Settings\Http\Requests\Admin\ConfigListRequest;
@@ -20,6 +21,7 @@ class ConfigController extends EscolaLmsBaseController implements ConfigControll
     {
         AdministrableConfig::setConfig($request->input('config'));
         AdministrableConfig::storeConfig();
+        event(new SettingPackageConfigUpdated($request->user(), AdministrableConfig::getConfig()));
         return $this->sendResponse(AdministrableConfig::getConfig());
     }
 }
