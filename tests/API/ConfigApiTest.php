@@ -3,10 +3,12 @@
 namespace Tests\APIs;
 
 use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
+use EscolaLms\Settings\Events\SettingPackageConfigUpdated;
 use EscolaLms\Settings\Facades\AdministrableConfig;
 use EscolaLms\Settings\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 
 class ConfigApiTest extends TestCase
 {
@@ -87,6 +89,7 @@ class ConfigApiTest extends TestCase
 
     public function test_update()
     {
+        Event::fake();
         $this->response = $this->json(
             'GET',
             '/api/config'
@@ -114,7 +117,9 @@ class ConfigApiTest extends TestCase
             ]
         );
         $this->response->assertOk();
-
+        Event::assertDispatched(SettingPackageConfigUpdated::class, function ($event) {
+            return $event->getUser() === $this->user && !empty($event->getConfig());
+        });
         $this->response = $this->json(
             'GET',
             '/api/config'
