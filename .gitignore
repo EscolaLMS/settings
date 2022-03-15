@@ -1,9 +1,12 @@
-vendor/
 tags
-.phpunit.result.cache
-.idea/
 src/oa_version.php
 ./phpunit.xml
 ./testbench.yaml
+/vendor
+.phpunit.result.cache
 composer.lock
-./.env
+.idea
+openapi.json
+.env
+scorm
+.DS_Store
