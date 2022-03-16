@@ -5,6 +5,7 @@ namespace EscolaLms\Settings\Services;
 use EscolaLms\Settings\Models\Config as ModelsConfig;
 use EscolaLms\Settings\Services\Contracts\AdministrableConfigServiceContract;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -92,6 +93,11 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
 
     public function loadConfigFromDatabase(bool $forced = false): bool
     {
+        try {
+            DB::connection()->getPdo();
+        } catch (\Exception $e) {
+            return false;
+        }
         if ((Config::get('escola_settings.use_database', false) || $forced) && Schema::hasTable('config')) {
             $configModel = ModelsConfig::query()->find(1);
             if (!is_null($configModel)) {
@@ -104,6 +110,7 @@ class AdministrableConfigService implements AdministrableConfigServiceContract
                 return true;
             }
         }
+
         return false;
     }
 
