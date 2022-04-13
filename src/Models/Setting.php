@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Storage;
  *          property="enumerable",
  *          description="enumerable",
  *          type="boolean"
- *      ), 
+ *      ),
  *      @OA\Property(
  *          property="sort",
  *          description="sort",
@@ -91,13 +91,11 @@ class Setting extends Model
         switch($this->type) {
             case "config":
                 return config($this->value);
-                break;
             case "json":
                 return json_decode($this->value);
-                break;
             case "file":
-                return Storage::url($this->value);
-                break;
+                $path = trim(trim($this->value, '/'));
+                return Storage::url($path);
             default:
                 return $this->value;
         }
