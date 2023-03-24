@@ -2,6 +2,7 @@
 
 namespace Tests\APIs;
 
+use EscolaLms\Settings\Enums\SettingTypes;
 use EscolaLms\Settings\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use EscolaLms\Settings\Tests\TestCase;
@@ -139,6 +140,94 @@ class SettingsAdminTest extends TestCase
         $this->response->assertNotFound();
     }
 
+    public function test_admin_update_number()
+    {
+        $setting = Setting::first();
+
+        $input = [
+            'group' => 'config',
+            'key' => 'number_field',
+            'value' => 123,
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::NUMBER
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/' . $setting->id,
+            $input
+        );
+
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
+
+    public function test_admin_update_number_invalid()
+    {
+        $setting = Setting::first();
+
+        $input = [
+            'group' => 'config',
+            'key' => 'number_field',
+            'value' => 'invalid',
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::NUMBER
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/' . $setting->id,
+            $input
+        )->assertUnprocessable();
+    }
+
+    public function test_admin_update_boolean()
+    {
+        $setting = Setting::first();
+
+        $input = [
+            'group' => 'texts',
+            'key' => 'boolean_field',
+            'value' => true,
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::BOOLEAN
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/' . $setting->id,
+            $input
+        );
+
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
+
+    public function test_admin_update_boolean_invalid()
+    {
+        $setting = Setting::first();
+
+        $input = [
+            'group' => 'config',
+            'key' => 'boolean_field',
+            'value' => 'invalid',
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::BOOLEAN
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/' . $setting->id,
+            $input
+        )->assertUnprocessable();
+    }
+
     public function test_admin_create()
     {
         $input = [
@@ -159,6 +248,84 @@ class SettingsAdminTest extends TestCase
         $this->response->assertOk();
 
         $this->assertEquals($input['value'], $this->response->getData()->data->value);
+    }
+
+    public function test_admin_create_number()
+    {
+        $input = [
+            'group' => 'texts',
+            'key' => 'number_field',
+            'value' => 123,
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::NUMBER,
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        );
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
+
+    public function test_admin_create_number_invalid()
+    {
+        $input = [
+            'group' => 'texts',
+            'key' => 'number_field',
+            'value' => "invalid value",
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::NUMBER,
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        )->assertUnprocessable();
+    }
+
+    public function test_admin_create_boolean()
+    {
+        $input = [
+            'group' => 'texts',
+            'key' => 'boolean_field',
+            'value' => true,
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::BOOLEAN,
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        );
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
+
+    public function test_admin_create_boolean_invalid()
+    {
+        $input = [
+            'group' => 'texts',
+            'key' => 'boolean_field',
+            'value' => "invalid value",
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::BOOLEAN,
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        )->assertUnprocessable();
     }
 
     public function test_admin_delete()

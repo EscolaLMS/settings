@@ -4,6 +4,7 @@ namespace EscolaLms\Settings\Http\Requests\Admin;
 
 use EscolaLms\Settings\Models\Setting;
 use EscolaLms\Settings\Enums\SettingTypes;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,14 @@ class SettingsUpdateRequest extends FormRequest
             'enumerable' => ['boolean'],
             'sort' => ['integer'],
             'type' => ['sometimes',  Rule::in(SettingTypes::getValues())],
-            'value' => ['sometimes', 'string'],
+            'value' => ['sometimes'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->sometimes('value', ['numeric'], fn($input) => $input->type === SettingTypes::NUMBER);
+        $validator->sometimes('value', ['boolean'], fn($input) => $input->type === SettingTypes::BOOLEAN);
+        $validator->sometimes('value', ['string'], fn($input) => !in_array($input->type, [SettingTypes::NUMBER, SettingTypes::BOOLEAN]));
     }
 }
