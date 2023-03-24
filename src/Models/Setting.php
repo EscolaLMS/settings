@@ -98,6 +98,8 @@ class Setting extends Model
                 return Storage::url($path);
             case "boolean":
                 return filter_var($this->value, FILTER_VALIDATE_BOOLEAN);
+            case "number":
+                return floatval($this->value);
             default:
                 return $this->value;
         }

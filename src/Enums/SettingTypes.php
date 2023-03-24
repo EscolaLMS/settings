@@ -13,4 +13,5 @@ class SettingTypes extends BasicEnum
     const FILE = 'file';
     const CONFIG = 'config';
     const BOOLEAN = 'boolean';
+    const NUMBER = 'number';
 }
