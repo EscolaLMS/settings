@@ -96,6 +96,8 @@ class Setting extends Model
             case "file":
                 $path = trim(trim($this->value, '/'));
                 return Storage::url($path);
+            case "boolean":
+                return filter_var($this->value, FILTER_VALIDATE_BOOLEAN);
             default:
                 return $this->value;
         }
