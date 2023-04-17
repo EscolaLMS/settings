@@ -93,6 +93,7 @@ class Setting extends Model
                 return config($this->value);
             case "json":
                 return json_decode($this->value);
+            case "image":
             case "file":
                 $path = trim(trim($this->value, '/'));
                 return Storage::url($path);
