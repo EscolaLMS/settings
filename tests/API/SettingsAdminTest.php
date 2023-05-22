@@ -2,12 +2,12 @@
 
 namespace Tests\APIs;
 
+use EscolaLms\Settings\Database\Seeders\DatabaseSeeder;
+use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
 use EscolaLms\Settings\Enums\SettingTypes;
 use EscolaLms\Settings\Models\Setting;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use EscolaLms\Settings\Tests\TestCase;
-use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
-use EscolaLms\Settings\Database\Seeders\DatabaseSeeder;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SettingsAdminTest extends TestCase
 {
@@ -24,6 +24,7 @@ class SettingsAdminTest extends TestCase
         $this->user->guard_name = 'api';
         $this->user->assignRole('admin');
     }
+
     /**
      * @test
      */
@@ -39,6 +40,17 @@ class SettingsAdminTest extends TestCase
         $this->response->assertJsonFragment(['data' => ["USD", "EUR"]]);
         $this->response->assertJsonFragment(['data' => 'Lorem IPSUM']);
         $this->response->assertJsonFragment(['current_page' => 1]);
+    }
+
+    public function test_admin_fetch_without_pagination()
+    {
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'GET',
+            '/api/admin/settings',
+            ['per_page' => -1]
+        );
+        $this->response->assertOk();
+        $this->response->assertJsonMissing(['current_page' => 1]);
     }
 
     public function test_admin_fetch_paginate()
@@ -72,6 +84,27 @@ class SettingsAdminTest extends TestCase
         $this->response->assertOk();
 
         $this->response->assertJsonFragment(['group' => 'images']);
+
+        Setting::firstOrCreate([
+            'group' => 'images',
+            'key' => 'test_test_test',
+            'value' => "tutor_avatar.jpg",
+            'public' => true,
+            'enumerable' => true,
+            'type' => 'image'
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'GET',
+            '/api/admin/settings?group=images',
+            [
+                'key' => 'test_test_test'
+            ]);
+
+        $this->response
+            ->assertOk()
+            ->assertJsonFragment(['key' => 'test_test_test'])
+            ->assertJsonCount(1, 'data');
     }
 
     public function test_admin_show()
