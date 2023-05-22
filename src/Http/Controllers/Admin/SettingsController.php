@@ -30,8 +30,8 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
 
     public function index(SettingsListRequest $request): JsonResponse
     {
-        $search = $request->only(['group']);
-        $settings = $this->service->searchAndPaginate($search, $request->input('per_page'));
+        $search = $request->only(['group', 'key']);
+        $settings = $this->service->searchAndPaginate($search, $request->input('per_page', 15));
         return $this->sendResponseForResource(SettingResource::collection($settings), __("Order search results"));
     }
 

@@ -12,7 +12,7 @@ interface SettingsServiceContract
 
     public function find(string $group, string $key, $public = null): Model;
 
-    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator;
+    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator|Collection;
 
     public function groups(): Collection;
 }

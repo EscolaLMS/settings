@@ -33,7 +33,7 @@ class SettingsService implements SettingsServiceContract
         return Setting::where($where)->firstOrFail();
     }
 
-    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator
+    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator|Collection
     {
         /** @var OrderQueryBuilder $query */
         $query = Setting::query();
@@ -41,8 +41,11 @@ class SettingsService implements SettingsServiceContract
         if (Arr::get($search, 'group')) {
             $query->where('group', '=', $search['group']);
         }
+        if (Arr::get($search, 'key')) {
+            $query->where('key', '=', $search['key']);
+        }
 
-        return $query->paginate($per_page ?? 15);
+        return $per_page <= 0 ? $query->get() : $query->paginate($per_page ?? 15);
     }
 
     public function groups(): Collection
