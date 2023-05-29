@@ -379,4 +379,54 @@ class SettingsAdminTest extends TestCase
 
         $this->response->assertNotFound();
     }
+
+    public function test_admin_create_array()
+    {
+        $input = [
+            'group' => 'texts',
+            'key' => 'boolean_field',
+            'value' => [
+                'test1',
+                'test2',
+            ],
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::ARRAY,
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        );
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
+
+    public function test_admin_update_array()
+    {
+        $setting = Setting::first();
+
+        $input = [
+            'group' => 'texts',
+            'key' => 'boolean_field',
+            'value' => [
+                'test1',
+            ],
+            'public' => true,
+            'enumerable' => true,
+            'type' => SettingTypes::ARRAY
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'PUT',
+            '/api/admin/settings/' . $setting->id,
+            $input
+        );
+
+        $this->response->assertOk();
+
+        $this->assertEquals($input['value'], $this->response->getData()->data->data);
+    }
 }

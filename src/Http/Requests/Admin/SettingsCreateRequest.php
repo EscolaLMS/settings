@@ -32,6 +32,14 @@ class SettingsCreateRequest extends FormRequest
     {
         $validator->sometimes('value', ['numeric'], fn($input) => $input->type === SettingTypes::NUMBER);
         $validator->sometimes('value', ['boolean'], fn($input) => $input->type === SettingTypes::BOOLEAN);
-        $validator->sometimes('value', ['string'], fn($input) => !in_array($input->type, [SettingTypes::NUMBER, SettingTypes::BOOLEAN]));
+        $validator->sometimes('value', ['array'], fn($input) => $input->type === SettingTypes::ARRAY);
+        $validator->sometimes('value', ['string'], fn($input) => !in_array($input->type, [SettingTypes::NUMBER, SettingTypes::BOOLEAN, SettingTypes::ARRAY]));
+    }
+
+    protected function passedValidation(): void
+    {
+        if ($this->type === SettingTypes::ARRAY) {
+            $this->merge(['value' => json_encode($this->value)]);
+        }
     }
 }

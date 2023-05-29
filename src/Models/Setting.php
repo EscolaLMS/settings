@@ -92,6 +92,7 @@ class Setting extends Model
             case "config":
                 return config($this->value);
             case "json":
+            case "array":
                 return json_decode($this->value);
             case "file":
                 $path = trim(trim($this->value, '/'));
