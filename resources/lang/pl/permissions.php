@@ -9,6 +9,7 @@ return [
     SettingsPermissionsEnum::SETTINGS_UPDATE => 'Aktualizuj ustawienie',
     SettingsPermissionsEnum::SETTINGS_READ => 'Wyświetl ustawienie',
     SettingsPermissionsEnum::SETTINGS_LIST => 'Lista ustawień',
+    SettingsPermissionsEnum::SETTINGS_LIST_READONLY => 'Lista ustawień tylko do odczytu',
     SettingsPermissionsEnum::CONFIG_LIST => 'Lista konfiguracji',
     SettingsPermissionsEnum::CONFIG_UPDATE => 'Aktualizuj konfigurację',
 ];

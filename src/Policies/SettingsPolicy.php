@@ -13,7 +13,8 @@ class SettingsPolicy
 
     public function list(User $user): bool
     {
-        return $user->can(SettingsPermissionsEnum::SETTINGS_LIST);
+        return $user->can(SettingsPermissionsEnum::SETTINGS_LIST)
+            || $user->can(SettingsPermissionsEnum::SETTINGS_LIST_READONLY);
     }
 
     public function view(User $user): bool

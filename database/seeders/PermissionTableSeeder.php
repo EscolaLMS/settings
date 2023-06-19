@@ -24,6 +24,7 @@ class PermissionTableSeeder extends Seeder
         Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_LIST, 'api');
         Permission::findOrCreate(SettingsPermissionsEnum::CONFIG_LIST, 'api');
         Permission::findOrCreate(SettingsPermissionsEnum::CONFIG_UPDATE, 'api');
+        Permission::findOrCreate(SettingsPermissionsEnum::SETTINGS_LIST_READONLY, 'api');
 
         $admin->givePermissionTo([
             SettingsPermissionsEnum::SETTINGS_MANAGE,
@@ -34,6 +35,11 @@ class PermissionTableSeeder extends Seeder
             SettingsPermissionsEnum::SETTINGS_LIST,
             SettingsPermissionsEnum::CONFIG_LIST,
             SettingsPermissionsEnum::CONFIG_UPDATE,
+        ]);
+
+        $tutor = Role::findOrCreate(UserRole::TUTOR, 'api');
+        $tutor->givePermissionTo([
+            SettingsPermissionsEnum::SETTINGS_LIST_READONLY,
         ]);
     }
 }
