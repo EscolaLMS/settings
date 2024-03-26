@@ -39,7 +39,7 @@ class SettingsController extends EscolaLmsBaseController implements SettingsCont
     {
         $input = $request->all();
 
-        $setting = $this->repository->create($input);
+        $setting = $this->repository->findOrCreate($input);
 
         return $this->sendResponse($setting->toArray(), __('Setting saved successfully'));
     }
