@@ -283,6 +283,41 @@ class SettingsAdminTest extends TestCase
         $this->assertEquals($input['value'], $this->response->getData()->data->value);
     }
 
+    public function test_admin_create_not_duplicate()
+    {
+        $input = [
+            'group' => 'global',
+            'key' => 'logo',
+            'value' => "//logo.png",
+            'public' => true,
+            'enumerable' => true,
+            'type' => 'image'
+        ];
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        );
+        $id = $this->response->getData()->data->id;
+
+        $this->response->assertOk();
+        $this->assertEquals($input['value'], $this->response->getData()->data->value);
+
+        $this->response = $this->actingAs($this->user, 'api')->json(
+            'POST',
+            '/api/admin/settings',
+            $input
+        );
+
+        $this->response->assertOk();
+        $this->assertEquals($id, $this->response->getData()->data->id);
+        $this->assertEquals($input['value'], $this->response->getData()->data->value);
+
+        $this->assertCount(1, Setting::query()->where('group', 'global')->where('key', 'logo')->get());
+        $this->assertDatabaseHas('settings', $input);
+    }
+
     public function test_admin_create_number()
     {
         $input = [

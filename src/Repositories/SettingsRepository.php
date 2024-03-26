@@ -33,4 +33,13 @@ class SettingsRepository extends BaseRepository implements SettingsRepositoryCon
     {
         return Setting::class;
     }
+
+    public function findOrCreate(array $data): Setting
+    {
+        /** @var Setting */
+        return $this->model->newQuery()->firstOrCreate([
+            'key' => $data['key'],
+            'group' => $data['group']
+        ], $data);
+    }
 }
