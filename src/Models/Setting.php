@@ -51,6 +51,15 @@ use Illuminate\Support\Facades\Storage;
  *          type="integer",
  *      ),
  * )
+ *
+ * @property int $id
+ * @property string $type
+ * @property string $value
+ * @property string $key
+ * @property string $group
+ * @property boolean $public
+ * @property boolean $enumerable
+ * @property int $sort
  */
 
 class Setting extends Model
@@ -70,7 +79,7 @@ class Setting extends Model
     /**
      * The attributes that should be casted to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'key' => 'string',
