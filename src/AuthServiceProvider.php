@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
         Setting::class => SettingsPolicy::class,
     ];
 
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 

@@ -15,15 +15,15 @@ class SettingResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'key' => $this->key,
-            'group' => $this->group,
-            'value' => $this->value,
-            'public' => $this->public,
-            'enumerable' => $this->enumerable,
-            'sort' => $this->sort,
-            'type' => $this->type,
-            'data' => $this->data,
+            'id' => $this->resource->id,
+            'key' => $this->resource->key,
+            'group' => $this->resource->group,
+            'value' => $this->resource->value,
+            'public' => $this->resource->public,
+            'enumerable' => $this->resource->enumerable,
+            'sort' => $this->resource->sort,
+            'type' => $this->resource->type,
+            'data' => $this->resource->data,
         ];
     }
 }

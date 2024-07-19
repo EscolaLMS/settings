@@ -3,6 +3,7 @@
 namespace EscolaLms\Settings\Services;
 
 use EscolaLms\Settings\Http\Resources\SettingResource;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use EscolaLms\Settings\Services\Contracts\SettingsServiceContract;
 use EscolaLms\Settings\Models\Setting;
@@ -33,9 +34,9 @@ class SettingsService implements SettingsServiceContract
         return Setting::where($where)->firstOrFail();
     }
 
-    public function searchAndPaginate(array $search = [], ?int $per_page  = 15): LengthAwarePaginator|Collection
+    public function searchAndPaginate(array $search = [], ?int $per_page = 15): LengthAwarePaginator|Collection
     {
-        /** @var OrderQueryBuilder $query */
+        /** @var Builder $query */
         $query = Setting::query();
 
         if (Arr::get($search, 'group')) {
@@ -45,11 +46,11 @@ class SettingsService implements SettingsServiceContract
             $query->where('key', '=', $search['key']);
         }
 
-        return $per_page <= 0 ? $query->get() : $query->paginate($per_page ?? 15);
+        return $per_page <= 0 ? $query->get() : $query->paginate($per_page);
     }
 
     public function groups(): Collection
     {
-        return DB::table('settings')->select('group')->distinct()->get()->pluck('group');
+        return DB::table('settings')->select('group')->distinct()->pluck('group');
     }
 }
