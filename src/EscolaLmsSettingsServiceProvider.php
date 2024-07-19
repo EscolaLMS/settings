@@ -20,15 +20,21 @@ use Illuminate\Support\ServiceProvider;
  */
 class EscolaLmsSettingsServiceProvider extends ServiceProvider
 {
-    public $singletons = [
+    /**
+     * @var array<class-string, class-string>
+     */
+    public array $singletons = [
         SettingsRepositoryContract::class => SettingsRepository::class,
         SettingsServiceContract::class => SettingsService::class,
         AdministrableConfigServiceContract::class => AdministrableConfigService::class,
     ];
 
-    public $bindings = [];
+    /**
+     * @var array<class-string, class-string>
+     */
+    public array $bindings = [];
 
-    public function boot()
+    public function boot(): void
     {
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
