@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class RepositoryTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
     public function test_search_repository()
     {
         $this->seed(DatabaseSeeder::class);
@@ -46,5 +41,64 @@ class RepositoryTest extends TestCase
         ]);
 
         $this->assertEquals($setting->data, $arr);
+    }
+
+    /**
+     * @dataProvider settingDataProvider
+     */
+    public function test_setting_data_cast(string $type, $value, $expected)
+    {
+        Storage::shouldReceive('url')
+            ->andReturnUsing(fn($path) => 'http://example.storage/' . ltrim($path, '/'));
+
+        $setting = Setting::create([
+                'group' => 'example',
+                'key' => 'test_key_' . uniqid(),
+                'type' => $type,
+                'value' => $value,
+            ]);
+
+        $this->assertEquals($expected, $setting->data);
+    }
+
+    public static function settingDataProvider(): array
+    {
+        return [
+            'file' => [
+                'type' => 'file',
+                'value' => 'example.jpg',
+                'expected' => 'http://example.storage/example.jpg',
+            ],
+            'image' => [
+                'type' => 'image',
+                'value' => '//image.jpg',
+                'expected' => 'http://example.storage/image.jpg',
+            ],
+            'image as url' => [
+                'type' => 'image',
+                'value' => 'http://example.com/image.jpg',
+                'expected' => 'http://example.com/image.jpg',
+            ],
+            'boolean true' => [
+                'type' => 'boolean',
+                'value' => 'true',
+                'expected' => true,
+            ],
+            'boolean false' => [
+                'type' => 'boolean',
+                'value' => 'false',
+                'expected' => false,
+            ],
+            'number' => [
+                'type' => 'number',
+                'value' => '42.5',
+                'expected' => 42.5,
+            ],
+            'default' => [
+                'type' => 'text',
+                'value' => 'hello wellms',
+                'expected' => 'hello wellms',
+            ],
+        ];
     }
 }
