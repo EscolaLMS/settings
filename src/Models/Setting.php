@@ -5,6 +5,7 @@ namespace EscolaLms\Settings\Models;
 use Illuminate\Database\Eloquent\Model;
 use EscolaLms\Settings\Casts\Setting as SettingCast;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @OA\Schema(
@@ -103,7 +104,10 @@ class Setting extends Model
             case "json":
             case "array":
                 return json_decode($this->value);
+            case "image":
             case "file":
+                if (Str::startsWith($this->value, 'http'))
+                    return $this->value;
                 $path = trim(trim($this->value, '/'));
                 return Storage::url($path);
             case "boolean":
