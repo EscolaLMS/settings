@@ -12,6 +12,7 @@
                 ],
                 "summary": "Get admin config",
                 "description": "Get a listing of registered config keys",
+                "operationId": "54d8dbb6ec66ceac0cec0f0b5117597f",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -255,6 +256,7 @@
                 ],
                 "summary": "Get a listing of public config values.",
                 "description": "Get public config values",
+                "operationId": "c99c17c5f211a64b0999bffa73f25c73",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -370,5 +372,15 @@
                 "type": "object"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Admin Settings",
+            "description": "Admin Settings"
+        },
+        {
+            "name": "Settings",
+            "description": "Settings"
+        }
+    ]
 }
